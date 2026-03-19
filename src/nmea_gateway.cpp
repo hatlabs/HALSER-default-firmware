@@ -218,7 +218,7 @@ void run_nmea_gateway() {
 
   // --- LED: blink off briefly on each received NMEA 0183 sentence ---
 
-  nmea0183_io->sentence_filter_queue_->connect_to(
+  nmea0183_io->sentence_filter_->connect_to(
       new LambdaConsumer<String>([](const String&) {
         led_off_until = millis() + 50;
       }));
