@@ -67,7 +67,11 @@ void run_nmea_gateway() {
       ->set_config_schema(
           R"schema({"type":"object","properties":{"value":{"title":"Bit rate (bit/s)","type":"integer"}}})schema");
 
-  // UART1 for NMEA 0183 input
+  // UART1 for NMEA 0183 input. NMEA0183IO drains it only when the event loop
+  // ticks, so enlarge the RX buffer before begin(): at 38400 bit/s the default
+  // 256 bytes plus the 128-byte hardware FIFO hold about 100 ms of traffic,
+  // and 1024 bytes hold about 300 ms.
+  Serial1.setRxBufferSize(1024);
   Serial1.begin(bit_rate->get(), SERIAL_8N1, kUART1RxPin, kUART1TxPin);
 
   // NMEA 2000 (CAN bus via TWAI)
@@ -95,8 +99,8 @@ void run_nmea_gateway() {
   // Process N2K messages (address claim, heartbeat, etc.)
   event_loop()->onRepeat(1, []() { nmea2000->ParseMessages(); });
 
-  // NMEA 0183 I/O task (runs on dedicated FreeRTOS task)
-  auto nmea0183_io = new NMEA0183IOTask(&Serial1);
+  // NMEA 0183 input, read on the event loop
+  auto nmea0183_io = new NMEA0183IO(&Serial1);
 
   // --- Sentence Parsers ---
 

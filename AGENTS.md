@@ -37,7 +37,7 @@ GPIO 0 is checked at startup:
 
 ```
 UART1 (4800 baud, GPIO 3 RX)
-  → NMEA0183IOTask (dedicated FreeRTOS task)
+  → NMEA0183IO (read on the SensESP event loop)
   → Sentence parsers (GGA, RMC, VTG, HDG, VHW, DPT, MWV)
   → LambdaConsumer callbacks → ExpiringValue updates
   → Periodic N2K message senders
