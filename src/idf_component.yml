@@ -1,0 +1,7 @@
+# Managed component dependencies for the main (src) component, resolved from the
+# ESP-IDF component registry and pinned in dependencies.lock.
+dependencies:
+  # SensESP's Signal K websocket client includes <esp_websocket_client.h>, which
+  # ESP-IDF 5.x no longer bundles. 1.7.0 carries the TLS read/write race fix
+  # from 1.6.1.
+  espressif/esp_websocket_client: "==1.7.0"
