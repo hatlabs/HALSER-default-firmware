@@ -11,9 +11,8 @@ namespace halser {
 /// N2kDoubleNA instead of a stale value.
 ///
 /// Thread safety: all update() and is_valid()/to_n2k() calls must occur on
-/// the same thread (the main SensESP event loop). The NMEA0183IOTask marshals
-/// parsed values back to the main loop via TaskQueueProducer, so this is safe
-/// in the current architecture.
+/// the same thread (the main SensESP event loop). NMEA0183IO reads and parses
+/// on the event loop, so this holds in the current architecture.
 template <typename T>
 class ExpiringValue {
  public:
